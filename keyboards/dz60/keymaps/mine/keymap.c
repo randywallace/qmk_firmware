@@ -3,14 +3,42 @@
 #define _______ KC_TRNS
 #define XXXXXXX KC_NO
 
-#define RGB_STA RGB_M_P //rgb static
-#define RGB_BRE RGB_M_B //rgb breathe
-#define RGB_RAI RGB_M_R //rgb rainbow
+#define RGB_STA RGB_M_P  //rgb static
+#define RGB_BRE RGB_M_B  //rgb breathe
+#define RGB_RAI RGB_M_R  //rgb rainbow
 #define RGB_SWI RGB_M_SW //rgb swirl
 #define RGB_SNA RGB_M_SN //rgb snake
-#define RGB_KNI RGB_M_K //rgb knight
-#define RGB_GRA RGB_M_G //rgb gradient
+#define RGB_KNI RGB_M_K  //rgb knight
+#define RGB_GRA RGB_M_G  //rgb gradient
 
+#define TAPPING_TERM 400
+
+enum custom_keycodes {
+  TMUX_L1 = SAFE_RANGE,
+  TMUX_L2,
+  TMUX_L3,
+  TMUX_L4
+};
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    if (record->event.pressed) {
+        switch(keycode) {
+            case TMUX_L1:
+                SEND_STRING(SS_LCTRL("a"));
+                return false;
+            case TMUX_L2:
+                SEND_STRING(SS_LCTRL("a")"a");
+                return false;
+            case TMUX_L3:
+                SEND_STRING(SS_LCTRL("a")"aa");
+                return false;
+            case TMUX_L4:
+                SEND_STRING(SS_LCTRL("a")"aaa");
+                return false;
+        }
+    }
+    return true;
+};
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -20,11 +48,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    * |-----------------------------------------------------------|
    * |Tab  |  Q|  W|  E|  R|  T|  Y|  U|  I|  O|  P|  [|  ]|  \  |
    * |-----------------------------------------------------------|
-   * |CAPS/MO|  A|  S|  D|  F|  G|  H|  J|  K|  L|  ;|  '|Return |
+   * |MO(1)  |  A|  S|  D|  F|  G|  H|  J|  K|  L|  ;|  '|Return |
    * |-----------------------------------------------------------|
    * |Shift   |  Z|  X|  C|  V|  B|  N|  M|  ,|  .|  /|Shift     |
    * |-----------------------------------------------------------|
-   * |Ctrl|Gui |Alt |      Space            |Alt |Gui |MO  |Ctrl |
+   * |Ctrl|Gui |Alt |      Space            |Alt |Gui|MO(2)|Ctrl |
    * `-----------------------------------------------------------'
    */
     LAYOUT(
@@ -38,22 +66,22 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    * ,-----------------------------------------------------------.
    * |Esc~|F1| F2| F3| F4| F5| F6| F7| F8| F9|F10|F11|F12| DELETE|
    * |-----------------------------------------------------------|
-   * |     |   |   |   |   |   |   |   |   |   |   |   |   |     |
+   * |     |   | T1| T2| T3| T4|   |   |   |   |   |   |   |     |
    * |-----------------------------------------------------------|
-   * |MO(1)  |   |   |   |   |   | LT| DN| UP| RT|INS|   |Return |
+   * |       |   |   |   |   |   | LT| DN| UP| RT|INS|   |       |
    * |-----------------------------------------------------------|
-   * |Shift   |  Z|  X|  C|  V|  B|  N|  M|  ,|  .|  /|Shift     |
+   * |        |   |   |   |   |   |   |   |   |   |   |          |
    * |-----------------------------------------------------------|
-   * |Ctrl|Gui |Alt |      Space            |Alt |Gui |MO  |Ctrl |
+   * |    |    |    |                       |    |    |    |     |
    * `-----------------------------------------------------------'
    */
 
     LAYOUT(
-        KC_GRV , KC_F1  , KC_F2  , KC_F3  , KC_F4  , KC_F5  , KC_F6  , KC_F7  , KC_F8  , KC_F9   , KC_F10 , KC_F11 , KC_F12 , _______, KC_DEL ,
-        _______,          _______, _______, _______, _______, _______, _______, _______, _______ , _______, _______, _______, _______, _______,
-        _______, _______, _______, _______, _______, _______, KC_LEFT, KC_DOWN, KC_UP  , KC_RGHT , KC_INS , _______,          _______,
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______ , _______, _______, _______,          _______,
-        _______,          _______, _______, _______,          _______,          _______, _______ , _______, _______, _______,          _______),
+        KC_GRV , KC_F1  , KC_F2  , KC_F3  , KC_F4  , KC_F5   , KC_F6   , KC_F7  , KC_F8  , KC_F9   , KC_F10 , KC_F11 , KC_F12 , _______, KC_DEL ,
+        _______,          _______, TMUX_L1, TMUX_L2, TMUX_L3 , TMUX_L4 , _______, _______, _______ , _______, _______, _______, _______, _______,
+        _______, _______, _______, _______, _______, _______ , KC_LEFT , KC_DOWN, KC_UP  , KC_RGHT , KC_INS , _______,          _______,
+        _______, _______, _______, _______, _______, _______ , _______ , _______, _______, _______ , _______, _______, _______,          _______,
+        _______,          _______, _______, _______,           _______ ,          _______, _______ , _______, _______, _______,          _______),
 
    /* Keymap : Third Layer (RGB / Reset)
    * ,-----------------------------------------------------------.
