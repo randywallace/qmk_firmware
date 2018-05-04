@@ -98,13 +98,17 @@ void matrix_scan_user(void) {
 }
 
 void dance_tmux (qk_tap_dance_state_t *state, void *user_data) {
-  switch (state->count) {
+  if ( state->count >= TMUX_L1 && state->count <= TMUX_L5 ) {
+    TMUX_LAYER(state->count);
+    reset_tap_dance(state);
+  }
+  /* switch (state->count) {
     case TMUX_L1: TMUX_LAYER(TMUX_L1); reset_tap_dance(state); break;
     case TMUX_L2: TMUX_LAYER(TMUX_L2); reset_tap_dance(state); break;
     case TMUX_L3: TMUX_LAYER(TMUX_L3); reset_tap_dance(state); break;
     case TMUX_L4: TMUX_LAYER(TMUX_L4); reset_tap_dance(state); break;
     case TMUX_L5: TMUX_LAYER(TMUX_L5); reset_tap_dance(state); break;
-  }
+  }*/
 }
 
 qk_tap_dance_action_t tap_dance_actions[] = {
