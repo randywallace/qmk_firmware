@@ -46,8 +46,8 @@ enum custom_keycodes {
     KC_HIST = SAFE_RANGE, // Bash History Search ( Ctrl + r )
     KC_SPVUP,             // VoiceMeeter Spotify Vol Up (LAlt + PgUp)
     KC_SPVDN,             // VoiceMeeter Spotify Vol Down (LAlt + PgDown)
-    KC_SLACK,             // Switch to slack (Ctrl + Win + Alt + s)
-    KC_TERM               // Switch to terminal ( Alt + Esc )
+    KC_SLACK,             // AHK - Switch to slack (Ctrl + Win + Alt + s)
+    KC_TERM               // AHK - Switch to terminal ( Ctrl + Esc )
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
@@ -66,7 +66,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 SEND_STRING( SS_DOWN(X_LCTRL) SS_DOWN(X_LGUI) SS_DOWN(X_LALT) "s" SS_UP(X_LALT) SS_UP(X_LGUI) SS_UP(X_LCTRL) );
                 return false;
             case KC_TERM:
-                SEND_STRING( SS_DOWN(X_LALT) SS_TAP(X_ESCAPE) SS_UP(X_LALT) );
+                SEND_STRING( SS_DOWN(X_LCTRL) SS_TAP(X_ESCAPE) SS_UP(X_LCTRL) );
                 return false;
         }
     }
