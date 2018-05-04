@@ -11,16 +11,24 @@
 #define RGB_KNI RGB_M_K  //rgb knight
 #define RGB_GRA RGB_M_G  //rgb gradient
 
+// For my use, the tmux prefix is Ctrl + a. I use nested tmux sessions, and switching
+// around them requires Ctrl + a, a, a, depending on the nested layer I am editing.  This is
+// accomplished with the 'bind a send-prefix' option in tmux.  For many years, I have assumed
+// a strong muscle memory for this pattern (for better or worse); with QMK, I have added
+// the ability to tap-dance or macro this pattern quite effectively with the Preprocessor
+// directive below.  Note that, as I work with nested tmux sessions potentially running on
+// different hosts or users, that the TMUX_DELAY directive is essential to prevent sending the
+// subsequent keypresses too quickly
 #define TMUX_DELAY 50
-
-#define TMUX_LAYER(layer)             \
-        {  int lyr = layer;           \
-          SEND_STRING(SS_LCTRL("a")); \
-          while ( lyr > TMUX_L1 ) {   \
-            _delay_ms(TMUX_DELAY);    \
-            SEND_STRING("a");         \
-            lyr--;                    \
-          };                          \
+#define TMUX_PREFIX "a"
+#define TMUX_LAYER(layer)                     \
+        {  int lyr = layer;                   \
+          SEND_STRING(SS_LCTRL(TMUX_PREFIX)); \
+          while ( lyr > TMUX_L1 ) {           \
+            _delay_ms(TMUX_DELAY);            \
+            SEND_STRING(TMUX_PREFIX);         \
+            lyr--;                            \
+          };                                  \
         }
 
 enum layers {
