@@ -66,10 +66,8 @@ void matrix_scan_user(void) {
 // around them requires Ctrl + a, a, a, depending on the nested layer I am editing.  This is
 // accomplished with the 'bind a send-prefix' option in tmux.  For many years, I have assumed
 // a strong muscle memory for this pattern (for better or worse); with QMK, I have added
-// the ability to tap-dance or macro this pattern quite effectively with the Preprocessor
-// directive below.  Note that, as I work with nested tmux sessions potentially running on
-// different hosts or users, that the TMUX_DELAY directive is essential to prevent sending the
-// subsequent keypresses too quickly
+// the ability to tap-dance this pattern.  Note that, as I work with nested tmux sessions potentially running on
+// different hosts or users
 void dance_tmux_each (qk_tap_dance_state_t *state, void *user_data) {
   if ( state->count == 1 ) {
     SEND_STRING(SS_LCTRL(TMUX_PREFIX));
