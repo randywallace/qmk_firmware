@@ -30,7 +30,8 @@ enum custom_keycodes {
     KC_SPVUP,             // VoiceMeeter Spotify Vol Up (LAlt + PgUp)
     KC_SPVDN,             // VoiceMeeter Spotify Vol Down (LAlt + PgDown)
     KC_SLACK,             // AHK - Switch to slack (Ctrl + Win + Alt + s)
-    KC_TERM               // AHK - Switch to terminal ( Ctrl + Esc )
+    KC_TERM,              // AHK - Switch to terminal ( Ctrl + Esc )
+    KC_LOCK               // Lock Screen (LGui + L)
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
@@ -50,6 +51,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 return false;
             case KC_TERM:
                 SEND_STRING( SS_DOWN(X_LCTRL) SS_TAP(X_ESCAPE) SS_UP(X_LCTRL) );
+                return false;
+            case KC_LOCK:
+                SEND_STRING( SS_DOWN(X_LGUI) "l" SS_UP(X_LGUI) );
                 return false;
         }
     }
@@ -131,7 +135,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
    /* Keymap : Third Layer (RGB / Reset)
     * ,-----------------------------------------------------------.
-    * |   |   |   |   |   |   |   |   |   |   |   |   |   | SLEEP |
+    * |   |   |   |   |   |   |   |   |   |   |   |   |   | LOCK  |
     * |-----------------------------------------------------------|
     * |     |TOG|MOD|HUI|HUD|SAI|SAD|VAI|VAD|   |   |   |   |RESET|
     * |-----------------------------------------------------------|
@@ -144,7 +148,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     */
 
     [_RAISE] = LAYOUT(
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, KC_SLEP ,
+        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, KC_LOCK ,
         _______,          RGB_TOG, RGB_MOD, RGB_HUI, RGB_HUD, RGB_SAI, RGB_SAD, RGB_VAI, RGB_VAD, _______, _______, _______, _______, RESET   ,
         _______, RGB_STA, RGB_BRE, RGB_RAI, RGB_SWI, RGB_SNA, RGB_KNI, RGB_GRA, _______, KC_MPRV, KC_MPLY, KC_MNXT,          _______          ,
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, KC_VOLD, KC_VOLU, KC_MUTE,          _______ ,
