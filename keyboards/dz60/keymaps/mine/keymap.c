@@ -11,25 +11,8 @@
 #define RGB_KNI RGB_M_K  //rgb knight
 #define RGB_GRA RGB_M_G  //rgb gradient
 
-// For my use, the tmux prefix is Ctrl + a. I use nested tmux sessions, and switching
-// around them requires Ctrl + a, a, a, depending on the nested layer I am editing.  This is
-// accomplished with the 'bind a send-prefix' option in tmux.  For many years, I have assumed
-// a strong muscle memory for this pattern (for better or worse); with QMK, I have added
-// the ability to tap-dance or macro this pattern quite effectively with the Preprocessor
-// directive below.  Note that, as I work with nested tmux sessions potentially running on
-// different hosts or users, that the TMUX_DELAY directive is essential to prevent sending the
-// subsequent keypresses too quickly
-#define TMUX_DELAY 50
+#define TMUX_DANCE_TIMEOUT 800
 #define TMUX_PREFIX "a"
-#define TMUX_LAYER(layer)                     \
-        {  int lyr = layer;                   \
-          SEND_STRING(SS_LCTRL(TMUX_PREFIX)); \
-          while ( lyr > TMUX_L1 ) {           \
-            _delay_ms(TMUX_DELAY);            \
-            SEND_STRING(TMUX_PREFIX);         \
-            lyr--;                            \
-          };                                  \
-        }
 
 enum layers {
   _BASE,
@@ -40,14 +23,6 @@ enum layers {
 
 enum tapdance_keys {
   TD_TMUX = 0
-};
-
-enum tmux_tap_dance {
-  TMUX_L1 = 1,
-  TMUX_L2,
-  TMUX_L3,
-  TMUX_L4,
-  TMUX_L5
 };
 
 enum custom_keycodes {
@@ -88,24 +63,27 @@ void matrix_scan_user(void) {
   LEADER_DICTIONARY() {
     leading = false;
     leader_end();
-
-    SEQ_ONE_KEY (KC_1) { TMUX_LAYER(TMUX_L1); }
-    SEQ_ONE_KEY (KC_2) { TMUX_LAYER(TMUX_L2); }
-    SEQ_ONE_KEY (KC_3) { TMUX_LAYER(TMUX_L3); }
-    SEQ_ONE_KEY (KC_4) { TMUX_LAYER(TMUX_L4); }
-    SEQ_ONE_KEY (KC_5) { TMUX_LAYER(TMUX_L5); }
   }
 }
 
-void dance_tmux (qk_tap_dance_state_t *state, void *user_data) {
-  if ( state->count >= TMUX_L1 && state->count <= TMUX_L5 ) {
-    TMUX_LAYER(state->count);
-    reset_tap_dance(state);
+// For my use, the tmux prefix is Ctrl + a. I use nested tmux sessions, and switching
+// around them requires Ctrl + a, a, a, depending on the nested layer I am editing.  This is
+// accomplished with the 'bind a send-prefix' option in tmux.  For many years, I have assumed
+// a strong muscle memory for this pattern (for better or worse); with QMK, I have added
+// the ability to tap-dance or macro this pattern quite effectively with the Preprocessor
+// directive below.  Note that, as I work with nested tmux sessions potentially running on
+// different hosts or users, that the TMUX_DELAY directive is essential to prevent sending the
+// subsequent keypresses too quickly
+void dance_tmux_each (qk_tap_dance_state_t *state, void *user_data) {
+  if ( state->count == 1 ) {
+    SEND_STRING(SS_LCTRL(TMUX_PREFIX));
+  } else {
+    SEND_STRING(TMUX_PREFIX);
   }
-}
+};
 
 qk_tap_dance_action_t tap_dance_actions[] = {
- [TD_TMUX] = ACTION_TAP_DANCE_FN (dance_tmux)
+ [TD_TMUX] = ACTION_TAP_DANCE_FN_ADVANCED_TIME ( dance_tmux_each, NULL, NULL, TMUX_DANCE_TIMEOUT)
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
