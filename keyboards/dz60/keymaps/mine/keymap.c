@@ -25,7 +25,8 @@ enum custom_keycodes {
     KC_SPVDN,             // VoiceMeeter Spotify Vol Down (LAlt + PgDown)
     KC_SLACK,             // AHK - Switch to slack (Ctrl + Win + Alt + s)
     KC_TERM,              // AHK - Switch to terminal ( Ctrl + Esc )
-    KC_LOCK               // Lock Screen (LGui + L)
+    KC_LOCK,              // Lock Screen (LGui + L)
+    KC_IBANG              // WinCompose Interrobang
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
@@ -49,6 +50,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             case KC_LOCK:
                 SEND_STRING( SS_DOWN(X_LGUI) "l" SS_UP(X_LGUI) );
                 return false;
+	    case KC_IBANG:
+		SEND_STRING( SS_TAP(X_RALT) SS_LSFT( "1/" ) );
+		return false;
         }
     }
     return true;
@@ -122,7 +126,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_GRV , KC_F1  , KC_F2   , KC_F3  , KC_F4      , KC_F5   , KC_F6   , KC_F7  , KC_F8  , KC_F9   , KC_F10 , KC_F11  , KC_F12  , _______, KC_DEL ,
         _______,          _______ , _______, _______    , KC_HIST , KC_TERM , _______, KC_PGUP, _______ , _______, _______ , KC_SPVUP, _______, _______,
         _______, _______, KC_SLACK, KC_PGDN, TD(TD_TMUX), _______ , KC_LEFT , KC_DOWN, KC_UP  , KC_RGHT , KC_INS , KC_SPVDN,           _______         ,
-        _______, _______, _______ , _______, _______    , _______ , _______ , _______, _______, _______ , _______, _______ , _______ ,          _______,
+        _______, _______, _______ , _______, _______    , _______ , _______ , _______, _______, _______ , _______, KC_IBANG, _______ ,          _______,
         _______,          _______ , _______, _______    ,           _______ ,          _______, _______ , _______, _______ , _______ ,          _______),
 
    /* Keymap : Third Layer (RGB / Reset)
