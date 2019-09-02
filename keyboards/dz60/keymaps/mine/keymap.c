@@ -50,9 +50,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             case KC_LOCK:
                 SEND_STRING( SS_DOWN(X_LGUI) "l" SS_UP(X_LGUI) );
                 return false;
-	    case KC_IBANG:
-		SEND_STRING( SS_TAP(X_RALT) SS_LSFT( "1/" ) );
-		return false;
+           case KC_IBANG:
+                SEND_STRING( SS_TAP(X_RALT) SS_LSFT( "1/" ) );
+                return false;
         }
     }
     return true;
